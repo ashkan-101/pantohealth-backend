@@ -1,0 +1,4 @@
+export enum EnvVariables {
+  RABBITMQ_URL = 'RABBITMQ_URL',
+  RABBITMQ_QUEUE = 'RABBITMQ_QUEUE'
+}
