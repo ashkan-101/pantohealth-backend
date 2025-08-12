@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { ScheduleModule } from "@nestjs/schedule";
 import { join } from "path";
 
 
@@ -8,7 +9,8 @@ import { join } from "path";
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: join(process.cwd(), '.env')
-    })
+    }),
+    ScheduleModule.forRoot()
   ],
   providers: [],
   controllers: []
