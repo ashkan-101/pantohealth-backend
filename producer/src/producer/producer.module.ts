@@ -3,13 +3,14 @@ import { ConfigService } from "@nestjs/config";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { ProducerService } from "./producer.service";
 import { EnvVariables } from "src/enum/EnvVariables";
+import { RabbitMQClients } from "src/enum/RabbitMQClients";
 
 
 @Module({
   imports: [
     ClientsModule.registerAsync([
       {
-        name: 'RABBITMQ_SERVICE',
+        name: RabbitMQClients.RABBITMQ_SERVICE,
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
           transport: Transport.RMQ,

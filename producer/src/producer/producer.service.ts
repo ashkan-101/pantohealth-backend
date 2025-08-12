@@ -4,12 +4,14 @@ import { Cron } from "@nestjs/schedule";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { catchError, lastValueFrom } from "rxjs";
+import { EnvVariables } from "src/enum/EnvVariables";
+import { RabbitMQClients } from "src/enum/RabbitMQClients";
 
 
 @Injectable()
 export class ProducerService {
   constructor(
-    @Inject('RABBITMQ_SERVICE') private readonly client: ClientProxy,
+    @Inject(RabbitMQClients.RABBITMQ_SERVICE) private readonly client: ClientProxy,
   ){}
 
   private readXRayData(){
@@ -19,7 +21,7 @@ export class ProducerService {
   }
 
   private async publishXRayDataToQueue(data: any): Promise<void>{
-    await lastValueFrom(this.client.emit('x-ray-data', data).pipe(
+    await lastValueFrom(this.client.emit(EnvVariables.RABBITMQ_QUEUE, data).pipe(
       catchError(err => { throw err} )
     ))
   }
