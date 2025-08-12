@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { join } from "path";
+import { ProducerModule } from "./producer/producer.module";
 
 
 @Module({
@@ -10,7 +11,8 @@ import { join } from "path";
       isGlobal: true,
       envFilePath: join(process.cwd(), '.env')
     }),
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
+    ProducerModule
   ],
   providers: [],
   controllers: []
