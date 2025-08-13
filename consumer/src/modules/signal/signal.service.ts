@@ -1,0 +1,48 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Signal, SignalDocument } from './schema/signal.schema'
+import { PaginationDTO } from 'src/common/dtos/pagination.dto'; 
+import { paginationSolver, paginationGenerator } from '../../common/util/pagination.util'
+
+@Injectable()
+export class SignalService {
+  constructor(
+    @InjectModel(Signal.name) private readonly signalModel: Model<SignalDocument>,
+  ) {}
+
+  async create(data: Partial<Signal>): Promise<Signal> {
+    const signal = new this.signalModel(data);
+    return signal.save();
+  }
+
+  async findOne(id: string): Promise<Signal> {
+    const signal = await this.signalModel.findById(id).exec();
+    if (!signal) {
+      throw new NotFoundException(`Signal with ID "${id}" not found`);
+    }
+    return signal;
+  }
+
+  async findMany(pagination: PaginationDTO) {
+    const { page, limit, skip } = paginationSolver(pagination);
+
+    const [items, count] = await Promise.all([
+      this.signalModel.find().skip(skip).limit(limit).exec(),
+      this.signalModel.countDocuments().exec(),
+    ]);
+
+    return {
+      data: items,
+      pagination: paginationGenerator(count, page, limit),
+    };
+  }
+
+  async delete(id: string): Promise<{ message: string }> {
+    const result = await this.signalModel.findByIdAndDelete(id).exec();
+    if (!result) {
+      throw new NotFoundException(`Signal with ID "${id}" not found`);
+    }
+    return { message: 'Signal deleted successfully' };
+  }
+}
