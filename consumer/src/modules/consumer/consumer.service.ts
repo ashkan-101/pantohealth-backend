@@ -1,11 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { IProcessedSignal } from "src/common/interface/IProcessedSignal";
+import { ICreateSignal } from "../signal/interface/create-signal";
+import { SignalService } from "../signal/signal.service";
 
 @Injectable()
 export class ConsumerService {
-
+  private readonly createSignal: ICreateSignal
+  constructor(signalService: SignalService){
+    this.createSignal = signalService
+  }
   async processRawData(rawData: any) {
-    const processedSignals: IProcessedSignal[] = [];
 
     for (const deviceId in rawData) {
       const deviceData = rawData[deviceId];
@@ -14,15 +18,13 @@ export class ConsumerService {
         coordinates: entry[1],    
       }));
 
-      processedSignals.push({
+      const processedData: IProcessedSignal = {
         deviceId,
         timestamp: deviceData.time, 
         dataLength: readings.length,
         readings,
-      });
+      }
+      await this.createSignal.create(processedData)
     }
-
-    console.log(processedSignals);
-    // return processedSignals;
   }
 }

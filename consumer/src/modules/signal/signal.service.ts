@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Signal, SignalDocument } from './schema/signal.schema'
 import { PaginationDTO } from 'src/common/dtos/pagination.dto'; 
 import { paginationSolver, paginationGenerator } from '../../common/util/pagination.util'
+import { IProcessedSignal } from 'src/common/interface/IProcessedSignal';
 
 @Injectable()
 export class SignalService {
@@ -11,9 +12,9 @@ export class SignalService {
     @InjectModel(Signal.name) private readonly signalModel: Model<SignalDocument>,
   ) {}
 
-  async create(data: Partial<Signal>): Promise<Signal> {
-    const signal = new this.signalModel(data);
-    return signal.save();
+  async create(data: IProcessedSignal): Promise<Signal> {
+    const signal = await this.signalModel.create(data)
+    return await signal.save()
   }
 
   async findOne(id: string): Promise<Signal> {

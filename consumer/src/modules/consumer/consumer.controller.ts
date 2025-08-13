@@ -11,6 +11,6 @@ export class ConsumerController {
 
   @EventPattern('x-ray')
   async reciveDataFromQueue(@Payload() rawData: any){
-    await this.consumerService.processData(rawData)
+    await this.consumerService.processRawData(rawData)
   }
 }
