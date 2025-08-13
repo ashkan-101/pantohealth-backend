@@ -4,7 +4,6 @@ import { Cron } from "@nestjs/schedule";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { catchError, lastValueFrom } from "rxjs";
-import { EnvVariables } from "src/enum/EnvVariables";
 import { RabbitMQClients } from "src/enum/RabbitMQClients";
 
 
@@ -21,7 +20,7 @@ export class ProducerService {
   }
 
   private async publishXRayDataToQueue(data: any): Promise<void>{
-    await lastValueFrom(this.client.emit(EnvVariables.RABBITMQ_QUEUE, data).pipe(
+    await lastValueFrom(this.client.emit('x-ray', data).pipe(
       catchError(err => { throw err} )
     ))
   }
