@@ -19,8 +19,8 @@ async function bootstrap() {
     }
   })
 
+  await app.listen(4000);
   await app.startAllMicroservices()
-  await app.listen(3000);
   console.log('consumer microservice is running ... ');
 }
 bootstrap();
