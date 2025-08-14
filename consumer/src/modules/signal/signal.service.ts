@@ -26,11 +26,16 @@ export class SignalService {
     return signal;
   }
 
-  async findMany(pagination: PaginationDTO) {
-    const { page, limit, skip } = paginationSolver(pagination);
+  async findMany(paginationDto: PaginationDTO, newest?: boolean) {
+    const { page, limit, skip } = paginationSolver(paginationDto);
+
+    let query = this.signalModel.find();
+    if (newest) {
+      query = query.sort({ createdAt: -1 });
+    }
 
     const [items, count] = await Promise.all([
-      this.signalModel.find().skip(skip).limit(limit).exec(),
+      query.skip(skip).limit(limit).exec(),
       this.signalModel.countDocuments().exec(),
     ]);
 

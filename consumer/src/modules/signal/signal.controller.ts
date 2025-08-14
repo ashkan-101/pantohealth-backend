@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, Delete, Put, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiParam, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { SignalService } from './signal.service'; 
 import { Pagination } from 'src/common/decorators/pagination.decorator';
 import { PaginationDTO } from 'src/common/dtos/pagination.dto'; 
@@ -20,10 +20,14 @@ export class SignalController {
 
   @Get()
   @Pagination()
-  @ApiOperation({ summary: 'Get a paginated list of signals' })
+  @ApiOperation({ summary: 'Get a paginated list of signals, optionally sorted by newest' })
+  @ApiQuery({ name: 'newest', required: false, type: Boolean, description: 'Sort signals by newest first' })
   @ApiResponse({ status: 200, description: 'List of signals with pagination' })
-  async findMany(@Query() pagination: PaginationDTO) {
-    return this.signalService.findMany(pagination);
+  async findMany(
+    @Query() pagination: PaginationDTO,
+    @Query('newest') newest?: boolean
+  ) {
+    return this.signalService.findMany(pagination, newest);
   }
 
   @Delete(':id')
