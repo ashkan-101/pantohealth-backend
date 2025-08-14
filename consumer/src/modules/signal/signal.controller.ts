@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Query, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Query, Delete, Put, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { SignalService } from './signal.service'; 
 import { Pagination } from 'src/common/decorators/pagination.decorator';
 import { PaginationDTO } from 'src/common/dtos/pagination.dto'; 
+import { UpdateSignalDto } from './dto/update-signal.dto';
 
 @ApiTags('Signals')
 @Controller('signals')
@@ -31,5 +32,10 @@ export class SignalController {
   @ApiResponse({ status: 200, description: 'Signal deleted successfully.' })
   async delete(@Param('id') id: string) {
     return this.signalService.delete(id);
+  }
+
+  @Put(':id')
+  async update( @Param() id: string, @Body() updateData: UpdateSignalDto ){
+    return this.signalService.updateById(id, updateData)
   }
 }

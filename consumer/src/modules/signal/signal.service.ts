@@ -5,6 +5,7 @@ import { Signal, SignalDocument } from './schema/signal.schema'
 import { PaginationDTO } from 'src/common/dtos/pagination.dto'; 
 import { paginationSolver, paginationGenerator } from '../../common/util/pagination.util'
 import { IProcessedSignal } from 'src/common/interface/IProcessedSignal';
+import { UpdateSignalDto } from './dto/update-signal.dto';
 
 @Injectable()
 export class SignalService {
@@ -45,5 +46,29 @@ export class SignalService {
       throw new NotFoundException(`Signal with ID "${id}" not found`);
     }
     return { message: 'Signal deleted successfully' };
+  }
+
+  async updateById(id: string, updateData: UpdateSignalDto){
+    const { 
+      deviceId,
+      timestamp,
+      dataLength
+    } = updateData
+    
+    const updateResult = await this.signalModel.updateOne({ _id: id}, 
+      { $set: {
+        deviceId,
+        timestamp,
+        dataLength
+      }}
+    )
+
+    if(updateResult.matchedCount === 0) {
+      throw new NotFoundException(`Signal with id ${id} not found`)
+    }
+    
+    return {
+      message: 'signal update successfuly!'
+    }
   }
 }
