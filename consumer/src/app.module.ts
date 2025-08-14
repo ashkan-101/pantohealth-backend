@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { ConsumerModule } from './modules/consumer/consumer.module';
 import { SignalModule } from './modules/signal/signal.module';
+import { EnvVariables } from './common/enum/EnvVariables';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { SignalModule } from './modules/signal/signal.module';
       isGlobal: true,
       envFilePath: join(process.cwd(), '.env')
     }),
-    MongooseModule.forRoot(process.env.MONGO_URI as string),
+    MongooseModule.forRoot(process.env[EnvVariables.MONGO_URI] as string),
     ConsumerModule,
     SignalModule
   ],
