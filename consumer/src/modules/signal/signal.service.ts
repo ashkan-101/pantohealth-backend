@@ -18,7 +18,7 @@ export class SignalService {
     return await signal.save()
   }
 
-  async findOne(id: string): Promise<Signal> {
+  async findOnebyId(id: string): Promise<Signal> {
     const signal = await this.signalModel.findById(id).exec();
     if (!signal) {
       throw new NotFoundException(`Signal with ID "${id}" not found`);
@@ -40,7 +40,7 @@ export class SignalService {
     };
   }
 
-  async delete(id: string): Promise<{ message: string }> {
+  async deleteById(id: string): Promise<{ message: string }> {
     const result = await this.signalModel.findByIdAndDelete(id).exec();
     if (!result) {
       throw new NotFoundException(`Signal with ID "${id}" not found`);

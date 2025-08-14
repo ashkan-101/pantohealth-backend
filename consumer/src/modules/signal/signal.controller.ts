@@ -15,7 +15,7 @@ export class SignalController {
   @ApiParam({ name: 'id', description: 'Signal ID', type: 'string' })
   @ApiResponse({ status: 200, description: 'Signal found successfully.' })
   async findOne(@Param('id') id: string) {
-    return this.signalService.findOne(id);
+    return this.signalService.findOnebyId(id);
   }
 
   @Get()
@@ -31,7 +31,7 @@ export class SignalController {
   @ApiParam({ name: 'id', description: 'Signal ID', type: 'string' })
   @ApiResponse({ status: 200, description: 'Signal deleted successfully.' })
   async delete(@Param('id') id: string) {
-    return this.signalService.delete(id);
+    return this.signalService.deleteById(id);
   }
 
   @Put(':id')
