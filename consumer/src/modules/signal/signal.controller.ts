@@ -35,7 +35,10 @@ export class SignalController {
   }
 
   @Put(':id')
-  async update( @Param() id: string, @Body() updateData: UpdateSignalDto ){
-    return this.signalService.updateById(id, updateData)
+  @ApiOperation({ summary: 'Update a signal by ID' })
+  @ApiParam({ name: 'id', description: 'Signal ID', type: 'string' })
+  @ApiResponse({ status: 200, description: 'Signal updated successfully.' })
+  async update(@Param('id') id: string, @Body() updateData: UpdateSignalDto) {
+    return this.signalService.updateById(id, updateData);
   }
 }
