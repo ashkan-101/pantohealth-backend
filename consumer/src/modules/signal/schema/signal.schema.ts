@@ -16,7 +16,8 @@ export class Signal {
     type: [{ 
       time: Number, 
       coordinates: [Number] 
-    }], 
+    }],
+    _id: false,
     required: true 
   })
   readings: { time: number; coordinates: number[] }[];
